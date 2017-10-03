@@ -17,7 +17,7 @@ class HangpersonGame
   end
   
   def guess(letter)
-    return raise ArgumentError unless (letter =~ /^\w+$/)
+    return raise ArgumentError unless (letter =~ /^[a-zA-Z]/)
     
     method_name = word =~ /#{letter}/i ? 'guesses' : 'wrong_guesses'
     return public_send(method_name).concat(letter) unless public_send(method_name) =~ /#{letter}/i
