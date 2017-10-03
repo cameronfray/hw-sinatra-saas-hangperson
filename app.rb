@@ -9,24 +9,11 @@ class HangpersonApp < Sinatra::Base
   
   before do
     @game = session[:game] || HangpersonGame.new('')
-    if session[:word]
-      @game.word = session[:word] 
-    end
-    
-    if session[:guesses]
-      @game.guesses = session[:guesses] 
-    end
-    
-    if session[:wrong_guesses]
-      @game.wrong_guesses = session[:wrong_guesses] 
-    end
   end
+
   
   after do
     session[:game] = @game
-    session[:word] = @game.word
-    session[:guesses] = @game.guesses
-    session[:wrong_guesses] = @game.wrong_guesses
   end
   
   # These two routes are good examples of Sinatra syntax
@@ -54,10 +41,7 @@ class HangpersonApp < Sinatra::Base
   post '/guess' do
     letter = params[:guess].to_s[0]
     begin
-      valid = @game.guess(letter)
-      unless valid
-        flash[:message] = "You have already used that letter."
-      end
+        flash[:message] = "You have already used that letter." unless @game.guess letter
       rescue ArgumentError
       flash[:message] = "Invalid guess"
     end
@@ -102,3 +86,4 @@ class HangpersonApp < Sinatra::Base
     game.word_with_guesses
   end 
 end
+ 
