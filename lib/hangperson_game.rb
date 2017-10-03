@@ -5,11 +5,16 @@ class HangpersonGame
 
   # Get a word from remote "random word" service
 
-  # def initialize()
+  def initialize()
+    @word = ''
+    @guesses = ''
+    @wrong_guesses = ''
   # end
   
   def initialize(word)
     @word = word
+    @guesses = ''
+    @wrong_guesses = ''
   end
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
@@ -23,5 +28,68 @@ class HangpersonGame
       return http.post(uri, "").body
     }
   end
+  
+  def guess(letter)
+    
+   # raise ArgumentError, "Invalid Argument." letter.is_a? String
+    raise ArgumentError, "Invalid Argument." unless letter =~  /[a-z]/i
+    
+    is_valid = true
+    
+      if @word =~ /[#{letter}]/i
+        unless @guesses =~ /[#{letter}]/i
+          @guesses += letter
+        else
+          is_valid = false
+        end
+        else
+          #is_valid = false
+          unless @wrong_guesses =~ /[#{letter}]/i
+            @wrong_guesses += letter
+          else
+            is_valid = false
+          end
+        end
+        is_valid
+  end
+  
+  def word_with_guesses
+    @word.gsub(/[^#{guesses + '#'}]/i, '-')
+  end
+  
+  def check_win_or_lose
+    if @wrong_guesses.length >= 7
+      return :lose
+    end
+    
+    if word_with_guesses =~ /[\-]/
+      return :play
+    else 
+      return :win
+    end
+  end
+  
+def word
+  @word
+end
 
+def word = (word)
+  @word = word
+end
+
+def guesses
+  @guesses
+end
+
+def guesses = (guesses)
+  @guesses = guesses
+end
+
+def wrong_guesses
+  @wrong_guesses
+end
+
+def wrong_guesses=(wrong_guesses)
+  @wrong_guesses = wrong_guesses
+end
 end
